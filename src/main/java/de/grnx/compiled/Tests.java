@@ -8,6 +8,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Tests {
 
     public static void main(String[] args) {
+        long startTime = System.currentTimeMillis();
+        PopulateTree.preInit();
+        long endTime = System.currentTimeMillis();
+        System.out.println("File Reading Operation took: " + (endTime - startTime) + "ms");
+
         testBSFWithArrayList();
         testBSFWithLinkedList();
         testBSFWithVector();
