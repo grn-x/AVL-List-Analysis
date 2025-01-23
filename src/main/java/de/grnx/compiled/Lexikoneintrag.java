@@ -37,4 +37,12 @@ public class Lexikoneintrag implements Datenelement {
     public void setName(String neuName) {
         this.name = neuName;
     }
+
+    @Override
+    public int compareTo(Datenelement o) {
+        return this.name.compareTo(o.getName());
+    }
+    public String toString() {
+        return this.name;
+    }
 }
