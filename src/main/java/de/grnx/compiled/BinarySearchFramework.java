@@ -46,7 +46,6 @@ public class BinarySearchFramework<T extends List<E>, E> {
     }
 
     public static void main(String[] args) {
-        // Example usage with ArrayList
         BinarySearchFramework<ArrayList<String>, String> arrayListFramework = new BinarySearchFramework<ArrayList<String>, String>(ArrayList.class);
         arrayListFramework.addElement("apple");
         arrayListFramework.addElement("banana");
@@ -55,7 +54,6 @@ public class BinarySearchFramework<T extends List<E>, E> {
         arrayListFramework.sortList();
         System.out.println(arrayListFramework.getList());
 
-        // Example usage with LinkedList
         BinarySearchFramework<LinkedList<String>, String> linkedListFramework = new BinarySearchFramework<>(LinkedList.class);
         linkedListFramework.addElement("apple");
         linkedListFramework.addElement("banana");
