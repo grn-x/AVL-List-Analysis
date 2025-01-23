@@ -6,23 +6,13 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BinarySearchFramework<T extends List<E>, E> {
+public class BinarySearchFramework<T extends List<E>, E> {//use wildcards instead? :/
 
     private T list;
 
-//    public BinarySearchFramework(Class<T> clazz) {
-//        try {
-//            Constructor<T> constructor = clazz.getDeclaredConstructor();
-//            this.list = constructor.newInstance();
-//        } catch (Exception e) {
-//            throw new RuntimeException("Failed to instantiate list", e);
-//        }
-//    }
-
-
-    public BinarySearchFramework(Class clazz) { //this urgently needs to be corrected to Class<T> clazz otherwise the type of list is not correctly inferred, ex passing a random class
+    public BinarySearchFramework(Class<T> listClass, Class<E> elementClass) {
         try {
-            Constructor<T> constructor = clazz.getDeclaredConstructor();
+            Constructor<T> constructor = listClass.getDeclaredConstructor();
             this.list = constructor.newInstance();
         } catch (Exception e) {
             throw new RuntimeException("Failed to instantiate list", e);
@@ -37,8 +27,9 @@ public class BinarySearchFramework<T extends List<E>, E> {
         Collections.shuffle(list);
     }
 
+    @SuppressWarnings("unchecked")
     public void sortList() {
-        Collections.sort((List<Comparable>) list);
+        list.sort((o1, o2) -> ((Comparable<E>) o1).compareTo(o2));
     }
 
     public List<E> getList() {
@@ -46,7 +37,8 @@ public class BinarySearchFramework<T extends List<E>, E> {
     }
 
     public static void main(String[] args) {
-        BinarySearchFramework<ArrayList<String>, String> arrayListFramework = new BinarySearchFramework<ArrayList<String>, String>(ArrayList.class);
+        BinarySearchFramework<ArrayList<String>, String> arrayListFramework =
+                new BinarySearchFramework<>(ArrayList.class, String.class);
         arrayListFramework.addElement("apple");
         arrayListFramework.addElement("banana");
         arrayListFramework.addElement("cherry");
@@ -54,7 +46,8 @@ public class BinarySearchFramework<T extends List<E>, E> {
         arrayListFramework.sortList();
         System.out.println(arrayListFramework.getList());
 
-        BinarySearchFramework<LinkedList<String>, String> linkedListFramework = new BinarySearchFramework<>(LinkedList.class);
+        BinarySearchFramework<LinkedList<String>, String> linkedListFramework =
+                new BinarySearchFramework<>(LinkedList.class, String.class);
         linkedListFramework.addElement("apple");
         linkedListFramework.addElement("banana");
         linkedListFramework.addElement("cherry");
