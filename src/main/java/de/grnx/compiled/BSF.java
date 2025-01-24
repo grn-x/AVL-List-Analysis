@@ -9,7 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @param <T> The type of list to be instantiated
  * @param <E> The type of elements in the list
  */
-public class BSF<T extends List<E>, E> {
+public class BSF<T extends List<E>, E extends Comparable> {
     private T list;
 
     public BSF(Class<? extends T> clazz) {
@@ -23,6 +23,105 @@ public class BSF<T extends List<E>, E> {
 
     public void addElement(E element) {
         list.add(element);
+    }
+
+    public void addElement(int index, E element) {
+        list.add(index, element);
+    }
+
+    public void insertElement(E element) {
+        int index = searchForInsertion(element);
+        list.add(index, element);
+    }
+
+    public void removeElement(E element) {
+        list.remove(element);
+    }
+
+    public E get(int index) {
+        return list.get(index);
+    }
+
+    public int size() {
+        return list.size();
+    }
+
+    public int search(E element) {
+        if (list instanceof RandomAccess) { //necessary? when using linked list resort to linear search, compare performance
+        return binarySerach(element);
+        } else {
+         return linearSearch(element);
+        }
+    }
+    private int binarySerach(E element){
+        int low = 0;
+        int high = list.size() - 1;
+        while (low <= high) {
+            int mid = (low + high) >>> 1; //unsigned shift needed + avoid overflow
+            Comparable<E> midVal = (Comparable<E>) list.get(mid);
+            int cmp = midVal.compareTo(element);
+            if (cmp < 0) {
+                low = mid + 1;
+            } else if (cmp > 0) {
+                high = mid - 1;
+            } else {
+                return mid;
+            }
+        }
+        return -1;
+
+    }
+
+    private int linearSearch(E element) {
+        for (int i = 0; i < list.size(); i++) {
+            Comparable<E> midVal = (Comparable<E>) list.get(i);
+            int cmp = midVal.compareTo(element);
+            if (cmp == 0) {
+                return i;
+            }
+
+        }
+        return -1;
+    }
+
+
+    public int searchForInsertion(E element) {
+        if (list instanceof RandomAccess) {
+            return binarySearchForInsertion(element);
+        } else {
+            return linearSearchForInsertion(element);
+        }
+    }
+
+    private int binarySearchForInsertion(E element) {
+        int low = 0;
+        int high = list.size() - 1;
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            Comparable<E> midVal = (Comparable<E>) list.get(mid);
+            int cmp = midVal.compareTo(element);
+            if (cmp < 0) {
+                low = mid + 1;
+            } else if (cmp > 0) {
+                high = mid - 1;
+            } else {
+                return mid; // Element found
+            }
+        }
+        return low; // Element not found, return insertion point
+    }
+
+    private int linearSearchForInsertion(E element) {
+        for (int i = 0; i < list.size(); i++) {
+            Comparable<E> midVal = (Comparable<E>) list.get(i);
+            int cmp = midVal.compareTo(element);
+            if (cmp == 0) {
+                return i; // Element found
+            } else if (cmp > 0) {
+                return i; // Element not found, return insertion point
+            }
+        }
+        return list.size(); // Element not found, return insertion point at the end
     }
 
     public void shuffleList() {
@@ -40,6 +139,8 @@ public class BSF<T extends List<E>, E> {
     public String toString() {
         return list.getClass().getTypeName() + "\n" + list.toString();
     }
+
+
 
     public static void main(String[] args) {
         BSF<ArrayList<String>, String> arrayListFramework = new BSF<>(ArrayList.class);

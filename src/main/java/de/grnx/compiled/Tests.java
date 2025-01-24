@@ -27,8 +27,11 @@ public class Tests {
         arrayListFramework.shuffleList();
         arrayListFramework.sortList();
         long endTime = System.currentTimeMillis();
+        int index = arrayListFramework.search(arrayListFramework.get(arrayListFramework.size() - 1));
+        System.out.println("Searched Index: " + index);
         System.out.println("ArrayList Test Time: " + (endTime - startTime) + "ms");
         System.out.println("arrayListFramework.toString() = " + arrayListFramework.toString());
+
     }
 
     private static void testBSFWithLinkedList() {
