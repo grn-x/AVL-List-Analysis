@@ -2,6 +2,7 @@ package de.grnx.compiled;
 
 import de.grnx.compiled.util.PopulateTree;
 
+import java.sql.Array;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -13,11 +14,23 @@ public class Tests {
         long endTime = System.currentTimeMillis();
         System.out.println("File Reading Operation took: " + (endTime - startTime) + "ms");
 
+        testBSFfunctionality();
         testBSFWithArrayList();
         testBSFWithLinkedList();
         testBSFWithVector();
         testBSFWithCopyOnWriteArrayList();
         testBSFWithStack();
+    }
+
+    private static void testBSFfunctionality(){
+        BSF<ArrayList<Lexikoneintrag>, Lexikoneintrag> arrayListFramework = new BSF<>(ArrayList.class);
+        var list = new ArrayList<Lexikoneintrag> ();
+        PopulateTree.populateListRef(list, 1000, 0);
+        for (var item : list) {
+            arrayListFramework.insertElement(item);
+        }
+        System.out.println("arrayListFramework.toString() = " + arrayListFramework.toString());
+
     }
 
     private static void testBSFWithArrayList() {
