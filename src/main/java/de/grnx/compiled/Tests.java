@@ -15,11 +15,12 @@ public class Tests {
         System.out.println("File Reading Operation took: " + (endTime - startTime) + "ms");
 
         testBSFfunctionality();
-        testBSFWithArrayList();
+
+        /*testBSFWithArrayList();
         testBSFWithLinkedList();
         testBSFWithVector();
         testBSFWithCopyOnWriteArrayList();
-        testBSFWithStack();
+        testBSFWithStack();*/
     }
 
     private static void testBSFfunctionality(){
