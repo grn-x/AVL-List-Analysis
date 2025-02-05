@@ -30,4 +30,8 @@ public class Abschluss implements Baumelement {
     public void strukturiertPreOrderAusgeben(int tiefePar) {
         // Do nothing!
     }
+
+    public int getSize() {
+        return 0;
+    }
 }

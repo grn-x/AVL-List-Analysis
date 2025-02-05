@@ -28,7 +28,7 @@ public class Knoten implements Baumelement {
             }
         }
         else {
-            println("Element existiert schon");
+            //println("Element existiert schon"); //TODO
         }
         return this;
     }
@@ -77,5 +77,9 @@ public class Knoten implements Baumelement {
         else{
             return hoeheRechterTeilbaum;
         }
+    }
+
+    public int getSize() {
+        return 1 + linker_Nachfolger.getSize() + rechter_Nachfolger.getSize();
     }
 }

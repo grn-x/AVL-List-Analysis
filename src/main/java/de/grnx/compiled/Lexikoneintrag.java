@@ -1,6 +1,6 @@
 package de.grnx.compiled;
 
-public class Lexikoneintrag implements Datenelement {
+public class Lexikoneintrag implements Datenelement, de.grnx.interpreted.Datenelement{
 
     String name;
     public Lexikoneintrag(String neuName) {
@@ -18,9 +18,25 @@ public class Lexikoneintrag implements Datenelement {
     }
 
 
+    @Override
+    public boolean istGleich(de.grnx.interpreted.Datenelement neuDaten) {
+        if(!this.name.equals(neuDaten.getName())) {
+            // if not equal !
+            return false;
+        }
+        //else
+        return true;
+    }
+
     public String getName() {
         return this.name;
     }
+
+    @Override
+    public boolean istGrößerAls(de.grnx.interpreted.Datenelement neuDaten) {
+        return this.name.compareTo(neuDaten.getName()) > 0;
+    }
+
     public boolean istGrößerAls(Datenelement neuDaten) {
         // -1 if this.name < neuDaten.name
         // +1 if this.name > neuDaten.name

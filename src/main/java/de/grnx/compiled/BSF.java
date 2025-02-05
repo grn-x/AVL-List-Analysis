@@ -34,6 +34,12 @@ public class BSF<T extends List<E>, E extends Comparable> {
         list.add(index, element);
     }
 
+    /*public void insertElementWOduplicate(E element) {
+        if(list.contains(element))return;
+        int index = searchForInsertion(element);
+        list.add(index, element);
+    }*/
+
     public void removeElement(E element) {
         list.remove(element);
     }
@@ -57,7 +63,7 @@ public class BSF<T extends List<E>, E extends Comparable> {
         int low = 0;
         int high = list.size() - 1;
         while (low <= high) {
-            int mid = (low + high) >>> 1; //unsigned shift needed + avoid overflow
+            int mid = (low + high) >>> 1; //unsigned shift needed pos + avoid overflow large num
             Comparable<E> midVal = (Comparable<E>) list.get(mid);
             int cmp = midVal.compareTo(element);
             if (cmp < 0) {

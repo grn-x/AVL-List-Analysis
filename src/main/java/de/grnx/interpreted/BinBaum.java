@@ -12,6 +12,8 @@ public class BinBaum {
     public void reset() {
         wurzel = new Abschluss();
     }
+
+
     public void einfuegen(Datenelement neuDaten) {
         wurzel = wurzel.einfuegen(neuDaten);
     }
@@ -20,6 +22,10 @@ public class BinBaum {
         Lexikoneintrag l1 = new Lexikoneintrag(search_request);
         return wurzel.suchen(l1);
 
+    }
+
+    public int getSize() {
+        return wurzel.getSize();
     }
 
     public void inOrderausgeben() {
