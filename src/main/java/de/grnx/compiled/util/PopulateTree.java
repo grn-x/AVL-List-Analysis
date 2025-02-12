@@ -2,6 +2,7 @@ package de.grnx.compiled.util;
 
 import de.grnx.compiled.Lexikoneintrag;
 
+
 import java.io.File;
 import java.util.*;
 
@@ -75,6 +76,63 @@ public class PopulateTree {
 
         return returns;
     }
+
+
+    /**
+     * Temporary solution to get the same list of random names for both the compiled and interpreted code
+     * fix everything
+     *
+     * @param reference  The list to be populated
+     * @param numEntries The number of entries to be added
+     * @param nameLength Artifact from the original code OnlineIDE Code, not used
+     * @return List of Lexikoneintrags with the same names as the compiled code
+     */
+    public static List<de.grnx.interpreted.Lexikoneintrag> populateListRef_Duplicates_dual_large(List<Lexikoneintrag> reference, int numEntries, int nameLength) {
+        var returns = new ArrayList<de.grnx.interpreted.Lexikoneintrag>();
+        Random random = new Random();
+
+        for (int i = 0; i < numEntries; i++) {
+            StringBuilder nameBuilder = new StringBuilder(nameLength);
+            for (int j = 0; j < nameLength; j++) {
+                char randomChar = (char) ('a' + random.nextInt(26)); // Generate random lowercase letter
+                nameBuilder.append(randomChar);
+            }
+            String name = nameBuilder.toString();
+            reference.add(new Lexikoneintrag(name));
+            returns.add(new de.grnx.interpreted.Lexikoneintrag(name));
+        }
+
+        return returns;
+    }
+
+
+    public static Object[] populateListRef_Duplicates_trio_large(List<de.grnx.compiled.Lexikoneintrag> reference, int numEntries, int nameLength) {
+        var returns = new ArrayList<de.grnx.interpreted.Lexikoneintrag>();
+        var returns_avl = new ArrayList<de.grnx.interpretedAVL.Lexikoneintrag>();
+        Random random = new Random();
+        var stringSet = new HashSet<String>();
+
+        for (int i = 0; i < numEntries; i++) {
+            StringBuilder nameBuilder = new StringBuilder(nameLength);
+            for (int j = 0; j < nameLength; j++) {
+                char randomChar = (char) ('a' + random.nextInt(26)); // Generate random lowercase letter
+                nameBuilder.append(randomChar);
+            }
+
+            stringSet.add(nameBuilder.toString());
+            System.out.println("nameBuilder = " + nameBuilder);
+        }
+
+        for(String name : stringSet) {
+            reference.add(new Lexikoneintrag(name));
+            returns.add(new de.grnx.interpreted.Lexikoneintrag(name));
+            returns_avl.add(new de.grnx.interpretedAVL.Lexikoneintrag(name));
+        }
+        //return null;
+        return new Object[] {(Object)returns, (Object)returns_avl};
+        //return new ArrayList<List<de.grnx.interpreted.Lexikoneintrag>>[]{returns, returns_avl};
+    }
+
 
     /**
      * @deprecated Might implement later
