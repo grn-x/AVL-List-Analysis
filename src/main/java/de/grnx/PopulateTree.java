@@ -1,20 +1,19 @@
-package de.grnx.compiled.util;
+package de.grnx;
 
 import de.grnx.compiled.Lexikoneintrag;
 
 
-import java.io.File;
 import java.util.*;
 
 public class PopulateTree {
 
     /**
      * Call this to prepare the FileHandler and avoid skewed time results on the first run
-     * {@link de.grnx.compiled.util.FileHandler#getInstance()}
+     * {@link FileHandler#getInstance()}
      * -> Calling
-     * {@link de.grnx.compiled.util.FileHandler#FileHandler()}
+     * {@link FileHandler#FileHandler()}
      * -> Calling
-     * {@link de.grnx.compiled.util.FileHandler#readFromFile(String)}
+     * {@link FileHandler#readFromFile(String)}
      *
      * @see FileHandler
      */

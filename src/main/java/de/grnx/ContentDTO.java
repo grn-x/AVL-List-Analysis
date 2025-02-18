@@ -1,6 +1,4 @@
-package de.grnx.compiled.util;
-
-import de.grnx.interpreted.Lexikoneintrag;
+package de.grnx;
 
 import java.util.ArrayList;
 

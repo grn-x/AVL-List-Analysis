@@ -1,6 +1,5 @@
 package de.grnx;
 import static de.grnx.interpreted.Utils.*;
-import static java.lang.Math.random;
 
 import de.grnx.compiled.BSF;
 import de.grnx.interpreted.*;
@@ -22,15 +21,15 @@ public class Main {
     /** @SuppressWarnings(“unchecked”) */
     private static void compareBSFtoBinarySearchTree() {
         //List<de.grnx.compiled.Lexikoneintrag> entries_Compiled = new ArrayList<>();
-        //var entries_Interpreted = de.grnx.compiled.util.PopulateTree.populateListRef_Duplicates_dual_large(entries_Compiled, 10000, 1000); // Populate with 10,000 entries
+        //var entries_Interpreted = de.grnx.PopulateTree.populateListRef_Duplicates_dual_large(entries_Compiled, 10000, 1000); // Populate with 10,000 entries
 
         /*List<de.grnx.compiled.Lexikoneintrag> entries_Compiled = new ArrayList<>();
-        var entries_amalgamation = de.grnx.compiled.util.PopulateTree.populateListRef_Duplicates_trio_large(entries_Compiled, 10000, 10); // Populate with 10,000 entries
+        var entries_amalgamation = de.grnx.PopulateTree.populateListRef_Duplicates_trio_large(entries_Compiled, 10000, 10); // Populate with 10,000 entries
         List<de.grnx.interpreted.Lexikoneintrag> entries_Interpreted = (List<de.grnx.interpreted.Lexikoneintrag>)entries_amalgamation[0]; //holy fuck is this unsafe
         List<de.grnx.interpretedAVL.Lexikoneintrag> entries_Interpreted_AVL = (List<de.grnx.interpretedAVL.Lexikoneintrag>)entries_amalgamation[1];
         */
 
-        var contentDTO = de.grnx.compiled.util.PopulateTree.populateLists(1000, 10);
+        var contentDTO = PopulateTree.populateLists(1000, 10);
         var entries_Compiled = contentDTO.compiled();
         var entries_Interpreted = contentDTO.interpreted();
         var entries_Interpreted_AVL = contentDTO.interpretedAVL();

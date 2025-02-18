@@ -1,4 +1,4 @@
-package de.grnx.compiled.util;
+package de.grnx;
 
 import java.io.IOException;
 import java.nio.file.Files;
