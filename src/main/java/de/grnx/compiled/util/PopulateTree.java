@@ -120,7 +120,6 @@ public class PopulateTree {
             }
 
             stringSet.add(nameBuilder.toString());
-            System.out.println("nameBuilder = " + nameBuilder);
         }
 
         for(String name : stringSet) {

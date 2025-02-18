@@ -6,10 +6,7 @@ import de.grnx.compiled.BSF;
 import de.grnx.interpreted.*;
 //import de.grnx.compiled.*;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -31,7 +28,7 @@ public class Main {
         //var entries_Interpreted = de.grnx.compiled.util.PopulateTree.populateListRef_Duplicates_dual_large(entries_Compiled, 10000, 1000); // Populate with 10,000 entries
 
         List<de.grnx.compiled.Lexikoneintrag> entries_Compiled = new ArrayList<>();
-        var entries_amalgamation = de.grnx.compiled.util.PopulateTree.populateListRef_Duplicates_trio_large(entries_Compiled, 10000, 100); // Populate with 10,000 entries
+        var entries_amalgamation = de.grnx.compiled.util.PopulateTree.populateListRef_Duplicates_trio_large(entries_Compiled, 10000, 10); // Populate with 10,000 entries
         List<de.grnx.interpreted.Lexikoneintrag> entries_Interpreted = (List<de.grnx.interpreted.Lexikoneintrag>)entries_amalgamation[0]; //holy fuck is this unsafe
         List<de.grnx.interpretedAVL.Lexikoneintrag> entries_Interpreted_AVL = (List<de.grnx.interpretedAVL.Lexikoneintrag>)entries_amalgamation[1];
 
@@ -42,18 +39,19 @@ public class Main {
         long bsfDuration = testBSF(entries_Compiled);
         System.out.println("BSF (ArrayList (RandomAccess)) search time: " + bsfDuration + "ms\n");
 
+        entries_Interpreted.sort(Comparator.comparing(de.grnx.interpreted.Lexikoneintrag::getName));
         long bstDuration = testBinarySearchTree(entries_Interpreted);
         System.out.println("Binary search tree search time: " + bstDuration + "ms\n");
 
         long bstAVLDuration = testBinarySearchTreeAVL(entries_Interpreted_AVL);
-        System.out.println("Binary search tree (AVL, balanced) search time: " + bstDuration + "ms\n");
+        System.out.println("Binary search tree (AVL, balanced) search time: " + bstAVLDuration + "ms\n");
 
 
         long bsfLinearDuration = testBSFLinearSearch(entries_Compiled);
         System.out.println("BSF linear search time is " + bsfLinearDuration + "ms\n");
 
-        long bsfDuration_linked = testBSF_linked(entries_Compiled);
-        System.out.println("BSF (LinkedList (Non RandomAccess!)) search time: " + bsfDuration_linked + "ms\n");
+        //long bsfDuration_linked = testBSF_linked(entries_Compiled);
+        //System.out.println("BSF (LinkedList (Non RandomAccess!)) search time: " + bsfDuration_linked + "ms\n");
 
     }
 
@@ -63,6 +61,8 @@ public class Main {
         for (de.grnx.compiled.Lexikoneintrag entry : entries) {
             bsf.insertElement(entry);
         }
+
+        //System.out.println("bsf.toString() = " + bsf.toString());
 
         long bsfStartTime = System.currentTimeMillis();
         for(int i = 0; i < 100; i++) {
