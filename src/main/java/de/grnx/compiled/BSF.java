@@ -17,7 +17,7 @@ public class BSF<T extends List<E>, E extends Comparable> {
             Constructor<? extends T> constructor = clazz.getDeclaredConstructor();
             this.list = constructor.newInstance();
             if(!(list instanceof RandomAccess)){
-                System.out.println("Warning: List is not RandomAccess");
+                System.err.println("Warning: " + list.getClass().getTypeName() +" is not RandomAccess");
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to instantiate list", e);
@@ -82,6 +82,7 @@ public class BSF<T extends List<E>, E extends Comparable> {
     }
 
     private int linearSearch(E element) {
+        System.err.println("Warning: Linear search used: " + element);
         for (int i = 0; i < list.size(); i++) {
             Comparable<E> midVal = (Comparable<E>) list.get(i);
             int cmp = midVal.compareTo(element);
@@ -121,6 +122,7 @@ public class BSF<T extends List<E>, E extends Comparable> {
     }
 
     private int linearSearchForInsertion(E element) {
+        System.err.println("Warning: Linear search used: " + element);
         for (int i = 0; i < list.size(); i++) {
             Comparable<E> midVal = (Comparable<E>) list.get(i);
             int cmp = midVal.compareTo(element);

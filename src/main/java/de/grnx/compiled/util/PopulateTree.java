@@ -132,6 +132,32 @@ public class PopulateTree {
         //return new ArrayList<List<de.grnx.interpreted.Lexikoneintrag>>[]{returns, returns_avl};
     }
 
+    public static ContentDTO populateLists(int numEntries, int nameLength){
+        var returns = new ArrayList<de.grnx.interpreted.Lexikoneintrag>();
+        var returns_avl = new ArrayList<de.grnx.interpretedAVL.Lexikoneintrag>();
+        var reference = new ArrayList<de.grnx.compiled.Lexikoneintrag>();
+        Random random = new Random();
+        var stringSet = new HashSet<String>();
+
+        for (int i = 0; i < numEntries; i++) {
+            StringBuilder nameBuilder = new StringBuilder(nameLength);
+            for (int j = 0; j < nameLength; j++) {
+                char randomChar = (char) ('a' + random.nextInt(26)); // Generate random lowercase letter
+                nameBuilder.append(randomChar);
+            }
+
+            stringSet.add(nameBuilder.toString());
+        }
+
+        for(String name : stringSet) {
+            reference.add(new Lexikoneintrag(name));
+            returns.add(new de.grnx.interpreted.Lexikoneintrag(name));
+            returns_avl.add(new de.grnx.interpretedAVL.Lexikoneintrag(name));
+        }
+
+        return new ContentDTO(reference, returns, returns_avl);
+    }
+
 
     /**
      * @deprecated Might implement later
