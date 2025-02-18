@@ -16,6 +16,9 @@ public class BSF<T extends List<E>, E extends Comparable> {
         try {
             Constructor<? extends T> constructor = clazz.getDeclaredConstructor();
             this.list = constructor.newInstance();
+            if(!(list instanceof RandomAccess)){
+                System.out.println("Warning: List is not RandomAccess");
+            }
         } catch (Exception e) {
             throw new RuntimeException("Failed to instantiate list", e);
         }
@@ -53,13 +56,13 @@ public class BSF<T extends List<E>, E extends Comparable> {
     }
 
     public int search(E element) {
-        if (list instanceof RandomAccess) { //necessary? when using linked list resort to linear search, compare performance
-        return binarySerach(element);
+        if (true){ //(list instanceof RandomAccess) { //necessary? when using linked list resort to linear search, compare performance
+        return binarySearch(element);
         } else {
          return linearSearch(element);
         }
     }
-    private int binarySerach(E element){
+    private int binarySearch(E element){
         int low = 0;
         int high = list.size() - 1;
         while (low <= high) {
@@ -92,7 +95,7 @@ public class BSF<T extends List<E>, E extends Comparable> {
 
 
     public int searchForInsertion(E element) {
-        if (list instanceof RandomAccess) {
+        if (true) { //(list instanceof RandomAccess) {
             return binarySearchForInsertion(element);
         } else {
             return linearSearchForInsertion(element);

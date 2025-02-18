@@ -39,7 +39,7 @@ public class Main {
         long bsfDuration = testBSF(entries_Compiled);
         System.out.println("BSF (ArrayList (RandomAccess)) search time: " + bsfDuration + "ms\n");
 
-        entries_Interpreted.sort(Comparator.comparing(de.grnx.interpreted.Lexikoneintrag::getName));
+        //entries_Interpreted.sort(Comparator.comparing(de.grnx.interpreted.Lexikoneintrag::getName));
         long bstDuration = testBinarySearchTree(entries_Interpreted);
         System.out.println("Binary search tree search time: " + bstDuration + "ms\n");
 
@@ -50,8 +50,38 @@ public class Main {
         long bsfLinearDuration = testBSFLinearSearch(entries_Compiled);
         System.out.println("BSF linear search time is " + bsfLinearDuration + "ms\n");
 
-        //long bsfDuration_linked = testBSF_linked(entries_Compiled);
-        //System.out.println("BSF (LinkedList (Non RandomAccess!)) search time: " + bsfDuration_linked + "ms\n");
+        long bsfDuration_linked = testBSF_linked(entries_Compiled);
+        System.out.println("BSF (LinkedList (Non RandomAccess!)) search time: " + bsfDuration_linked + "ms\n");
+
+
+
+
+        /* Example Output:
+                _________________________________________________________________
+                <>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>
+                ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+
+                Compiled runtime:
+
+
+
+                Num Entries List: 10000
+                BSF (ArrayList (RandomAccess)) search time: 399ms
+
+                Num Entries Tree: 10000
+                Binary search tree search time: 412ms
+
+                Num Entries Tree: 10000
+                Binary search tree (AVL, balanced) search time: 332ms
+
+                Num Entries List (Linear Search): 10000
+                BSF linear search time is 12321ms
+
+                Warning: List is not RandomAccess
+                Num Entries List: 10000
+                BSF (LinkedList (Non RandomAccess!)) search time: 197491ms
+
+         */
 
     }
 
