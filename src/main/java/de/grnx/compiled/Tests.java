@@ -15,11 +15,12 @@ public class Tests {
         long endTime = System.currentTimeMillis();
         System.out.println("File Reading Operation took: " + (endTime - startTime) + "ms");
 
-        var contentDTO = PopulateTree.populateListRandomUnique(100000, 12);//=PopulateTree.populateListNamesUnique(100);
+        var contentDTO = PopulateTree.populateListRandomUnique(1000, 12);//=PopulateTree.populateListNamesUnique(100);
         Supplier<Stream<Lexikoneintrag>> streamSupplier = () -> contentDTO.compiled().stream();
 
         //testBSFfunctionality(streamSupplier.get());
         testBSFWithArrayList(streamSupplier);
+        //call System.gc in between and then use a memory profiler to see the differences
         testBSFWithVector(streamSupplier);
         testBSFWithStack(streamSupplier);
         testBSFWithCopyOnWriteArrayList(streamSupplier);

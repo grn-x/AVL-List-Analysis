@@ -9,9 +9,9 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("\n_________________________________________________________________\n<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>\n‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\n\nCompiled runtime:\n");
+        System.out.println("\n_________________________________________________________________\n<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>\n‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\n\nBare BSF-Tests:\n");
         de.grnx.compiled.Tests.main(new String[0]);
-        System.out.println("\n_________________________________________________________________\n<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>\n‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\n\nCompiled runtime:\n");
+        System.out.println("\n_________________________________________________________________\n<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>\n‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\n\nAVL-BSF-Comparison:\n");
         compareBSFtoBinarySearchTree();
         //compiledRuntime();
     }
@@ -35,105 +35,154 @@ public class Main {
 
         System.out.println("\n");
 
-        long bsfDuration = testBSF(entries_Compiled);
-        System.out.println("BSF (ArrayList (RandomAccess)) search time: " + bsfDuration + "ms\n");
+
+        System.out.println("BSF linear search: \n" + testBSFLinearSearch(entries_Compiled));
+
+        System.out.println("BSF (ArrayList (RandomAccess)): \n" + testBSF(entries_Compiled));
+
 
         //entries_Interpreted.sort(Comparator.comparing(de.grnx.interpreted.Lexikoneintrag::getName));
-        long bstDuration = testBinarySearchTree(entries_Interpreted);
-        System.out.println("Binary search tree search time: " + bstDuration + "ms\n");
+        System.out.println("Binary Tree (Non balanced, dataset randomized): \n" + testBinarySearchTree(entries_Interpreted));
 
-        long bstAVLDuration = testBinarySearchTreeAVL(entries_Interpreted_AVL);
-        System.out.println("Binary search tree (AVL, balanced) search time: " + bstAVLDuration + "ms\n");
+        System.out.println("\nBinary Tree (AVL, balanced, dataset randomized): \n" + testBinarySearchTreeAVL(entries_Interpreted_AVL));
+
+        System.out.println("Binary Tree (Non balanced, dataset presorted, worst-case): \n" + testBinarySearchTreePreSorted(entries_Interpreted));
 
 
-        long bsfLinearDuration = testBSFLinearSearch(entries_Compiled);
-        System.out.println("BSF linear search time is " + bsfLinearDuration + "ms\n");
 
-        long bsfDuration_linked = testBSF_linked(entries_Compiled);
-        System.out.println("BSF (LinkedList (Non RandomAccess!)) search time: " + bsfDuration_linked + "ms\n");
+        System.out.println("\nBSF (LinkedList (Non RandomAccess!)): \n" + testBSF_linked(entries_Compiled));
 
 
 
 
-        /* Example Output:
-                _________________________________________________________________
-                <>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>
-                ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+        /* Example Output: 10 chars each over 10,000 entries
 
-                Compiled runtime:
+            BSF linear search:
+            Num Entries List (Linear Search): 10000
+            Insertion time: 11,329ms
+                Search time (avg): 161,005ms
+                Search time (max): 191,982ms
+                Search time (min): 153,032ms
+
+            BSF (ArrayList (RandomAccess)):
+            Num Entries List: 10000
+            Insertion time: 7,075ms
+                Search time (avg): 2,759ms
+                Search time (max): 4,530ms
+                Search time (min): 2,407ms
+
+            Binary Tree (Non balanced, dataset randomized):
+            Num Entries Tree: 10000
+            Insertion time: 16,314ms
+                Search time (avg): 4,349ms
+                Search time (max): 11,210ms
+                Search time (min): 3,332ms
 
 
+            Binary Tree (AVL, balanced, dataset randomized):
+            Num Entries Tree: 10000
+            Insertion time: 878,072ms
+                Search time (avg): 3,328ms
+                Search time (max): 7,265ms
+                Search time (min): 2,825ms
 
-                Num Entries List: 10000
-                BSF (ArrayList (RandomAccess)) search time: 399ms
+            Binary Tree (Non balanced, dataset presorted, worst-case):
+            Num Entries Tree: 10000
+            Insertion time: 774,718ms
+                Search time (avg): 640,298ms
+                Search time (max): 823,111ms
+                Search time (min): 597,168ms
 
-                Num Entries Tree: 10000
-                Binary search tree search time: 412ms
+            Warning: java.util.LinkedList is not RandomAccess
 
-                Num Entries Tree: 10000
-                Binary search tree (AVL, balanced) search time: 332ms
+            BSF (LinkedList (Non RandomAccess!)):
+            Num Entries List: 10000
+            Insertion time: 996,273ms
+                Search time (avg): 2012,533ms
+                Search time (max): 2213,094ms
+                Search time (min): 1788,400ms
 
-                Num Entries List (Linear Search): 10000
-                BSF linear search time is 12321ms
-
-                Warning: List is not RandomAccess
-                Num Entries List: 10000
-                BSF (LinkedList (Non RandomAccess!)) search time: 197491ms
 
          */
 
     }
 
-    private static long testBSF(List<de.grnx.compiled.Lexikoneintrag> entries) {
+    private static String testBSF(List<de.grnx.compiled.Lexikoneintrag> entries) {
         BSF<ArrayList<de.grnx.compiled.Lexikoneintrag>, de.grnx.compiled.Lexikoneintrag> bsf = new BSF<>(ArrayList.class);
+        var timeDiffs = new Stack<Long>();
 
+        long insertStartNanos = System.nanoTime();
         for (de.grnx.compiled.Lexikoneintrag entry : entries) {
             bsf.insertElement(entry);
         }
+        long insertEndNanos = System.nanoTime();
 
-        //System.out.println("bsf.toString() = " + bsf.toString());
-
-        long bsfStartTime = System.currentTimeMillis();
-        for(int i = 0; i < 100; i++) {
-        for (de.grnx.compiled.Lexikoneintrag entry : entries) {
-            bsf.search(entry);
-        }
-        }
-        long bsfEndTime = System.currentTimeMillis();
-        System.out.println("Num Entries List: " + bsf.getList().size());
-        return bsfEndTime - bsfStartTime;
-    }
-
-
-    private static long testBSF_linked(List<de.grnx.compiled.Lexikoneintrag> entries) {
-        BSF<LinkedList<de.grnx.compiled.Lexikoneintrag>, de.grnx.compiled.Lexikoneintrag> bsf = new BSF<>(LinkedList.class);
-
-        for (de.grnx.compiled.Lexikoneintrag entry : entries) {
-            bsf.insertElement(entry);
-        }
-
-        long bsfStartTime = System.currentTimeMillis();
-        for(int i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
+            long searchSingular = System.nanoTime();
             for (de.grnx.compiled.Lexikoneintrag entry : entries) {
                 bsf.search(entry);
             }
+            timeDiffs.push(System.nanoTime() - searchSingular);
         }
-        long bsfEndTime = System.currentTimeMillis();
-        System.out.println("Num Entries List: " + bsf.getList().size());
-        return bsfEndTime - bsfStartTime;
+
+        long avg = timeDiffs.stream().mapToLong(Long::longValue).sum() / timeDiffs.size();
+        long max = timeDiffs.stream().mapToLong(Long::longValue).max().getAsLong();
+        long min = timeDiffs.stream().mapToLong(Long::longValue).min().getAsLong();
+
+        var returns = new StringBuilder();
+        returns.append("Num Entries List: ").append(bsf.getList().size()).append("\n");
+        returns.append("Insertion time: ").append(String.format("%.3f", (insertEndNanos - insertStartNanos) / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (avg): ").append(String.format("%.3f", avg / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (max): ").append(String.format("%.3f", max / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (min): ").append(String.format("%.3f", min / 1000000.0)).append("ms\n");
+
+        return returns.toString();
     }
 
-    private static long testBSFLinearSearch(List<de.grnx.compiled.Lexikoneintrag> entries) {
-        BSF<ArrayList<de.grnx.compiled.Lexikoneintrag>, de.grnx.compiled.Lexikoneintrag> bsf = new BSF<>(ArrayList.class);
+    private static String testBSF_linked(List<de.grnx.compiled.Lexikoneintrag> entries) {
+        BSF<LinkedList<de.grnx.compiled.Lexikoneintrag>, de.grnx.compiled.Lexikoneintrag> bsf = new BSF<>(LinkedList.class);
+        var timeDiffs = new Stack<Long>();
 
-        // Insert entries into BSF
+        long insertStartNanos = System.nanoTime();
         for (de.grnx.compiled.Lexikoneintrag entry : entries) {
             bsf.insertElement(entry);
         }
+        long insertEndNanos = System.nanoTime();
 
-        // Perform linear search and time the BSF
-        long bsfStartTime = System.currentTimeMillis();
         for (int i = 0; i < 100; i++) {
+            long searchSingular = System.nanoTime();
+            for (de.grnx.compiled.Lexikoneintrag entry : entries) {
+                bsf.search(entry);
+            }
+            timeDiffs.push(System.nanoTime() - searchSingular);
+        }
+
+        long avg = timeDiffs.stream().mapToLong(Long::longValue).sum() / timeDiffs.size();
+        long max = timeDiffs.stream().mapToLong(Long::longValue).max().getAsLong();
+        long min = timeDiffs.stream().mapToLong(Long::longValue).min().getAsLong();
+
+        var returns = new StringBuilder();
+        returns.append("Num Entries List: ").append(bsf.getList().size()).append("\n");
+        returns.append("Insertion time: ").append(String.format("%.3f", (insertEndNanos - insertStartNanos) / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (avg): ").append(String.format("%.3f", avg / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (max): ").append(String.format("%.3f", max / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (min): ").append(String.format("%.3f", min / 1000000.0)).append("ms\n");
+
+        return returns.toString();
+    }
+
+    private static String testBSFLinearSearch(List<de.grnx.compiled.Lexikoneintrag> entries) {
+        BSF<ArrayList<de.grnx.compiled.Lexikoneintrag>, de.grnx.compiled.Lexikoneintrag> bsf = new BSF<>(ArrayList.class);
+        var timeDiffs = new Stack<Long>();
+
+        long insertStartNanos = System.nanoTime();
+        for (de.grnx.compiled.Lexikoneintrag entry : entries) {
+            bsf.insertElement(entry);
+        }
+        long insertEndNanos = System.nanoTime();
+
+        for (int i = 0; i < 100; i++) {
+            long searchSingular = System.nanoTime();
             for (de.grnx.compiled.Lexikoneintrag entry : entries) {
                 for (de.grnx.compiled.Lexikoneintrag element : bsf.getList()) {
                     if (element.equals(entry)) {
@@ -141,46 +190,126 @@ public class Main {
                     }
                 }
             }
+            timeDiffs.push(System.nanoTime() - searchSingular);
         }
-        long bsfEndTime = System.currentTimeMillis();
-        System.out.println("Num Entries List (Linear Search): " + bsf.getList().size());
-        return bsfEndTime - bsfStartTime;
+
+        long avg = timeDiffs.stream().mapToLong(Long::longValue).sum() / timeDiffs.size();
+        long max = timeDiffs.stream().mapToLong(Long::longValue).max().getAsLong();
+        long min = timeDiffs.stream().mapToLong(Long::longValue).min().getAsLong();
+
+        var returns = new StringBuilder();
+        returns.append("Num Entries List (Linear Search): ").append(bsf.getList().size()).append("\n");
+        returns.append("Insertion time: ").append(String.format("%.3f", (insertEndNanos - insertStartNanos) / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (avg): ").append(String.format("%.3f", avg / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (max): ").append(String.format("%.3f", max / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (min): ").append(String.format("%.3f", min / 1000000.0)).append("ms\n");
+
+        return returns.toString();
     }
 
-    private static long testBinarySearchTree(List<de.grnx.interpreted.Lexikoneintrag> entries) {
+    private static String testBinarySearchTree(List<de.grnx.interpreted.Lexikoneintrag> entries) {
         de.grnx.interpreted.BinBaum binarySearchTree = new BinBaum();
+        var timeDiffs = new Stack<Long>();
 
+        long insertStartNanos = System.nanoTime();
         for (de.grnx.interpreted.Lexikoneintrag entry : entries) {
             binarySearchTree.einfuegen(entry);
         }
+        long insertEndNanos = System.nanoTime();
 
-        long bstStartTime = System.currentTimeMillis();
-        for(int i = 0; i < 100; i++) {
-        for (de.grnx.interpreted.Lexikoneintrag entry : entries) {
-            binarySearchTree.suchen(entry.getName());
+        for (int i = 0; i < 100; i++) {
+            long searchSingular = System.nanoTime();
+            for (de.grnx.interpreted.Lexikoneintrag entry : entries) {
+                binarySearchTree.suchen(entry.getName());
+            }
+            timeDiffs.push(System.nanoTime() - searchSingular);
         }
-        }
-        long bstEndTime = System.currentTimeMillis();
-        System.out.println("Num Entries Tree: " + binarySearchTree.getSize());
-        return bstEndTime - bstStartTime;
+
+        long avg = timeDiffs.stream().mapToLong(Long::longValue).sum() / timeDiffs.size();
+        long max = timeDiffs.stream().mapToLong(Long::longValue).max().getAsLong();
+        long min = timeDiffs.stream().mapToLong(Long::longValue).min().getAsLong();
+
+
+        var returns = new StringBuilder();
+        returns.append("Num Entries Tree: ").append(binarySearchTree.getSize()).append("\n");
+        returns.append("Insertion time: ").append(String.format("%.3f", (insertEndNanos - insertStartNanos) / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (avg): ").append(String.format("%.3f", avg / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (max): ").append(String.format("%.3f", max / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (min): ").append(String.format("%.3f", min / 1000000.0)).append("ms\n");
+
+        return returns.toString();
+
     }
 
-    private static long testBinarySearchTreeAVL(List<de.grnx.interpretedAVL.Lexikoneintrag> entries) {
-        de.grnx.interpretedAVL.BinBaum binarySearchTree = new de.grnx.interpretedAVL.BinBaum();
+    private static String testBinarySearchTreePreSorted(List<de.grnx.interpreted.Lexikoneintrag> entries) {
+        entries.sort(Comparator.comparing(de.grnx.interpreted.Lexikoneintrag::getName));
 
+        de.grnx.interpreted.BinBaum binarySearchTree = new BinBaum();
+        var timeDiffs = new Stack<Long>();
+
+        long insertStartNanos = System.nanoTime();
+        for (de.grnx.interpreted.Lexikoneintrag entry : entries) {
+            binarySearchTree.einfuegen(entry);
+        }
+        long insertEndNanos = System.nanoTime();
+
+        for (int i = 0; i < 100; i++) {
+            long searchSingular = System.nanoTime();
+            for (de.grnx.interpreted.Lexikoneintrag entry : entries) {
+                binarySearchTree.suchen(entry.getName());
+            }
+            timeDiffs.push(System.nanoTime() - searchSingular);
+        }
+
+        long avg = timeDiffs.stream().mapToLong(Long::longValue).sum() / timeDiffs.size();
+        long max = timeDiffs.stream().mapToLong(Long::longValue).max().getAsLong();
+        long min = timeDiffs.stream().mapToLong(Long::longValue).min().getAsLong();
+
+
+        var returns = new StringBuilder();
+        returns.append("Num Entries Tree: ").append(binarySearchTree.getSize()).append("\n");
+        returns.append("Insertion time: ").append(String.format("%.3f", (insertEndNanos - insertStartNanos) / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (avg): ").append(String.format("%.3f", avg / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (max): ").append(String.format("%.3f", max / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (min): ").append(String.format("%.3f", min / 1000000.0)).append("ms\n");
+
+        return returns.toString();
+    }
+
+    private static String testBinarySearchTreeAVL(List<de.grnx.interpretedAVL.Lexikoneintrag> entries) {
+        de.grnx.interpretedAVL.BinBaum binarySearchTree = new de.grnx.interpretedAVL.BinBaum();
+        var timeDiffs = new Stack<Long>();
+
+
+        long insertStartNanos = System.nanoTime();
         for (de.grnx.interpretedAVL.Lexikoneintrag entry : entries) {
             binarySearchTree.einfuegen(entry);
         }
+        long insertEndNanos = System.nanoTime();
 
-        long bstStartTime = System.currentTimeMillis();
         for(int i = 0; i < 100; i++) {
+            long searchSingular = System.nanoTime();
+
             for (de.grnx.interpretedAVL.Lexikoneintrag entry : entries) {
                 binarySearchTree.suchen(entry.getName());
             }
+            timeDiffs.push(System.nanoTime() - searchSingular);
         }
-        long bstEndTime = System.currentTimeMillis();
-        System.out.println("Num Entries Tree: " + binarySearchTree.getSize());
-        return bstEndTime - bstStartTime;
+        long searchEndNanos = System.nanoTime();
+
+        //get the average search time, the biggest and smallest
+        long avg = timeDiffs.stream().mapToLong(Long::longValue).sum() / timeDiffs.size();
+        long max = timeDiffs.stream().mapToLong(Long::longValue).max().getAsLong();
+        long min = timeDiffs.stream().mapToLong(Long::longValue).min().getAsLong();
+
+        var returns = new StringBuilder();
+        returns.append("Num Entries Tree: ").append(binarySearchTree.getSize()).append("\n");
+        returns.append("Insertion time: ").append(String.format("%.3f", (insertEndNanos - insertStartNanos) / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (avg): ").append(String.format("%.3f", avg / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (max): ").append(String.format("%.3f", max / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (min): ").append(String.format("%.3f", min / 1000000.0)).append("ms\n");
+
+        return returns.toString();
     }
 
     private static long testBinarySearchTree_AVL(List<de.grnx.interpreted.Lexikoneintrag> entries) {
