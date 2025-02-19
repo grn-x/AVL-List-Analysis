@@ -3,7 +3,6 @@ package de.grnx.compiled;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-//TODO implement precoded binary search framework, with sorted adding of items or reordering of items after adding
 /**
  * Generic class BinarySearchFramework that can be used to instantiate a list of a specific type and perform operations on it.
  * @param <T> The type of list to be instantiated

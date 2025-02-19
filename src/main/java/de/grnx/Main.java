@@ -28,31 +28,37 @@ public class Main {
         List<de.grnx.interpretedAVL.Lexikoneintrag> entries_Interpreted_AVL = (List<de.grnx.interpretedAVL.Lexikoneintrag>)entries_amalgamation[1];
         */
 
-        var contentDTO = PopulateTree.populateListRandomUnique(10000, 10);
+        var contentDTO = PopulateTree.populateListRandomUnique(50000, 1000);
         var entries_Compiled = contentDTO.compiled();
         var entries_Interpreted = contentDTO.interpreted();
         var entries_Interpreted_AVL = contentDTO.interpretedAVL();
 
         System.out.println("\n");
 
+/*
+        //System.out.println("BSF linear search: \n" + testBSFLinearSearch(entries_Compiled));
+        System.out.println("BSF (ArrayList (RandomAccess)): \n" + testBSF(entries_Compiled));
+        System.gc();
+        System.out.println("Binary Tree (Non balanced, dataset randomized): \n" + testBinarySearchTree(entries_Interpreted));
+        System.gc();
+        //System.out.println("\nBinary Tree (AVL, balanced, dataset randomized): \n" + testBinarySearchTreeAVL(entries_Interpreted_AVL));
+        //System.out.println("Binary Tree (Non balanced, dataset presorted, worst-case): \n" + testBinarySearchTreePreSorted(entries_Interpreted));
+        System.out.println("\nBSF (Stack (RandomAccess)): \n" + testBSF_stack(entries_Compiled));
+        System.gc();
+        System.out.println("\nBSF (Vector (RandomAccess)): \n" + testBSF_vector(entries_Compiled));
+        System.gc();
+        //System.out.println("\nBSF (LinkedList (Non RandomAccess!)): \n" + testBSF_linked(entries_Compiled));
+*/
+
 
         System.out.println("BSF linear search: \n" + testBSFLinearSearch(entries_Compiled));
-
         System.out.println("BSF (ArrayList (RandomAccess)): \n" + testBSF(entries_Compiled));
-
-
-        //entries_Interpreted.sort(Comparator.comparing(de.grnx.interpreted.Lexikoneintrag::getName));
         System.out.println("Binary Tree (Non balanced, dataset randomized): \n" + testBinarySearchTree(entries_Interpreted));
-
         System.out.println("\nBinary Tree (AVL, balanced, dataset randomized): \n" + testBinarySearchTreeAVL(entries_Interpreted_AVL));
-
         System.out.println("Binary Tree (Non balanced, dataset presorted, worst-case): \n" + testBinarySearchTreePreSorted(entries_Interpreted));
-
-
-
+        System.out.println("\nBSF (Stack (RandomAccess)): \n" + testBSF_stack(entries_Compiled));
+        System.out.println("\nBSF (Vector (RandomAccess)): \n" + testBSF_vector(entries_Compiled));
         System.out.println("\nBSF (LinkedList (Non RandomAccess!)): \n" + testBSF_linked(entries_Compiled));
-
-
 
 
         /* Example Output: 10 chars each over 10,000 entries
@@ -105,6 +111,32 @@ public class Main {
 
          */
 
+
+
+        /* 100,000s Entries with 1,000 chars each example:
+            BSF (ArrayList (RandomAccess)):
+            Num Entries List: 100000
+            Insertion time: 316,564ms
+                Search time (avg): 93,573ms
+                Search time (max): 202,000ms
+                Search time (min): 76,785ms
+
+            Binary Tree (Non balanced, dataset randomized):
+            Num Entries Tree: 100000
+            Insertion time: 154,320ms
+                Search time (avg): 117,216ms
+                Search time (max): 191,574ms
+                Search time (min): 97,148ms
+
+
+            Binary Tree (AVL, balanced, dataset randomized):
+            Num Entries Tree: 100000
+            Insertion time: 212823,719ms
+                Search time (avg): 94,495ms
+                Search time (max): 118,619ms
+                Search time (min): 83,614ms
+         */
+
     }
 
     private static String testBSF(List<de.grnx.compiled.Lexikoneintrag> entries) {
@@ -141,6 +173,70 @@ public class Main {
 
     private static String testBSF_linked(List<de.grnx.compiled.Lexikoneintrag> entries) {
         BSF<LinkedList<de.grnx.compiled.Lexikoneintrag>, de.grnx.compiled.Lexikoneintrag> bsf = new BSF<>(LinkedList.class);
+        var timeDiffs = new Stack<Long>();
+
+        long insertStartNanos = System.nanoTime();
+        for (de.grnx.compiled.Lexikoneintrag entry : entries) {
+            bsf.insertElement(entry);
+        }
+        long insertEndNanos = System.nanoTime();
+
+        for (int i = 0; i < 100; i++) {
+            long searchSingular = System.nanoTime();
+            for (de.grnx.compiled.Lexikoneintrag entry : entries) {
+                bsf.search(entry);
+            }
+            timeDiffs.push(System.nanoTime() - searchSingular);
+        }
+
+        long avg = timeDiffs.stream().mapToLong(Long::longValue).sum() / timeDiffs.size();
+        long max = timeDiffs.stream().mapToLong(Long::longValue).max().getAsLong();
+        long min = timeDiffs.stream().mapToLong(Long::longValue).min().getAsLong();
+
+        var returns = new StringBuilder();
+        returns.append("Num Entries List: ").append(bsf.getList().size()).append("\n");
+        returns.append("Insertion time: ").append(String.format("%.3f", (insertEndNanos - insertStartNanos) / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (avg): ").append(String.format("%.3f", avg / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (max): ").append(String.format("%.3f", max / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (min): ").append(String.format("%.3f", min / 1000000.0)).append("ms\n");
+
+        return returns.toString();
+    }
+
+    private static String testBSF_stack(List<de.grnx.compiled.Lexikoneintrag> entries) {
+        BSF<Stack<de.grnx.compiled.Lexikoneintrag>, de.grnx.compiled.Lexikoneintrag> bsf = new BSF<>(Stack.class);
+        var timeDiffs = new Stack<Long>();
+
+        long insertStartNanos = System.nanoTime();
+        for (de.grnx.compiled.Lexikoneintrag entry : entries) {
+            bsf.insertElement(entry);
+        }
+        long insertEndNanos = System.nanoTime();
+
+        for (int i = 0; i < 100; i++) {
+            long searchSingular = System.nanoTime();
+            for (de.grnx.compiled.Lexikoneintrag entry : entries) {
+                bsf.search(entry);
+            }
+            timeDiffs.push(System.nanoTime() - searchSingular);
+        }
+
+        long avg = timeDiffs.stream().mapToLong(Long::longValue).sum() / timeDiffs.size();
+        long max = timeDiffs.stream().mapToLong(Long::longValue).max().getAsLong();
+        long min = timeDiffs.stream().mapToLong(Long::longValue).min().getAsLong();
+
+        var returns = new StringBuilder();
+        returns.append("Num Entries List: ").append(bsf.getList().size()).append("\n");
+        returns.append("Insertion time: ").append(String.format("%.3f", (insertEndNanos - insertStartNanos) / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (avg): ").append(String.format("%.3f", avg / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (max): ").append(String.format("%.3f", max / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (min): ").append(String.format("%.3f", min / 1000000.0)).append("ms\n");
+
+        return returns.toString();
+    }
+
+    private static String testBSF_vector(List<de.grnx.compiled.Lexikoneintrag> entries) {
+        BSF<Vector<de.grnx.compiled.Lexikoneintrag>, de.grnx.compiled.Lexikoneintrag> bsf = new BSF<>(Vector.class);
         var timeDiffs = new Stack<Long>();
 
         long insertStartNanos = System.nanoTime();
