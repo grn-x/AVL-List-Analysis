@@ -21,141 +21,95 @@ public class PopulateTree {
         FileHandler.getInstance();
     }
 
-    /**
-     * Populates the passed List Object with random names
-     *
-     * @param reference  The list to be populated
-     * @param numEntries The number of entries to be added
-     * @param nameLength Artifact from the original code OnlineIDE Code, not used
-     */
-    public static void populateListRef(List<Lexikoneintrag> reference, int numEntries, int nameLength) {
+
+    public static ContentDTO populateListNames(int numEntries){
+        var compiled = new ArrayList<de.grnx.compiled.Lexikoneintrag>();
+        var interpreted = new ArrayList<de.grnx.interpreted.Lexikoneintrag>();
+        var interpretedAVL = new ArrayList<de.grnx.interpretedAVL.Lexikoneintrag>();
+
+
         for (String name : FileHandler.getInstance().getRandomNames(numEntries)) {
-            reference.add(new Lexikoneintrag(name));
-        }
-    }
-
-    /**
-     * Temporary solution to get the same list of random names for both the compiled and interpreted code
-     * fix everything
-     *
-     * @param reference  The list to be populated
-     * @param numEntries The number of entries to be added
-     * @param nameLength Artifact from the original code OnlineIDE Code, not used
-     * @return List of Lexikoneintrags with the same names as the compiled code
-     */
-    public static List<de.grnx.interpreted.Lexikoneintrag> populateListRef_dual(List<Lexikoneintrag> reference, int numEntries, int nameLength) {
-        var returns = new ArrayList<de.grnx.interpreted.Lexikoneintrag>();
-        for (String name : FileHandler.getInstance().getRandomNames(numEntries)) {
-            reference.add(new Lexikoneintrag(name));
-            returns.add(new de.grnx.interpreted.Lexikoneintrag(name));
-        }
-        return returns;
-    }
-
-    /**
-     * Temporary solution to get the same list of random names for both the compiled and interpreted code
-     * fix everything
-     *
-     * @param reference  The list to be populated
-     * @param numEntries The number of entries to be added
-     * @param nameLength Artifact from the original code OnlineIDE Code, not used
-     * @return List of Lexikoneintrags with the same names as the compiled code
-     */
-    public static List<de.grnx.interpreted.Lexikoneintrag> populateListRef_Duplicates_dual(List<Lexikoneintrag> reference, int numEntries, int nameLength) {
-        var returns = new ArrayList<de.grnx.interpreted.Lexikoneintrag>();
-
-        Set<String> addedNames = new HashSet<>(FileHandler.getInstance().getRandomNames(numEntries));
-
-        for (String name : addedNames) {
-            reference.add(new Lexikoneintrag(name));
-            returns.add(new de.grnx.interpreted.Lexikoneintrag(name));
+            compiled.add(new de.grnx.compiled.Lexikoneintrag(name));
+            interpreted.add(new de.grnx.interpreted.Lexikoneintrag(name));
+            interpretedAVL.add(new de.grnx.interpretedAVL.Lexikoneintrag(name));
         }
 
-        //solve this with streams or add all
-
-        return returns;
+        return new ContentDTO(compiled, interpreted, interpretedAVL);
     }
 
 
-    /**
-     * Temporary solution to get the same list of random names for both the compiled and interpreted code
-     * fix everything
-     *
-     * @param reference  The list to be populated
-     * @param numEntries The number of entries to be added
-     * @param nameLength Artifact from the original code OnlineIDE Code, not used
-     * @return List of Lexikoneintrags with the same names as the compiled code
-     */
-    public static List<de.grnx.interpreted.Lexikoneintrag> populateListRef_Duplicates_dual_large(List<Lexikoneintrag> reference, int numEntries, int nameLength) {
-        var returns = new ArrayList<de.grnx.interpreted.Lexikoneintrag>();
+    public static ContentDTO populateListNamesUnique(int numEntries){
+        var compiled = new ArrayList<de.grnx.compiled.Lexikoneintrag>();
+        var interpreted = new ArrayList<de.grnx.interpreted.Lexikoneintrag>();
+        var interpretedAVL = new ArrayList<de.grnx.interpretedAVL.Lexikoneintrag>();
+
+
+        var stringSet = new HashSet<String>(FileHandler.getInstance().getRandomNames(numEntries));
+
+        for(String name : stringSet) {
+            compiled.add(new de.grnx.compiled.Lexikoneintrag(name));
+            interpreted.add(new de.grnx.interpreted.Lexikoneintrag(name));
+            interpretedAVL.add(new de.grnx.interpretedAVL.Lexikoneintrag(name));
+        }
+
+
+        return new ContentDTO(compiled, interpreted, interpretedAVL);
+    }
+
+
+    public static ContentDTO populateListRandomUnique(int numEntries, int lenEntries){
+        var compiled = new ArrayList<de.grnx.compiled.Lexikoneintrag>();
+        var interpreted = new ArrayList<de.grnx.interpreted.Lexikoneintrag>();
+        var interpretedAVL = new ArrayList<de.grnx.interpretedAVL.Lexikoneintrag>();
+
         Random random = new Random();
+        var stringSet = new HashSet<String>();
 
         for (int i = 0; i < numEntries; i++) {
-            StringBuilder nameBuilder = new StringBuilder(nameLength);
-            for (int j = 0; j < nameLength; j++) {
+            StringBuilder nameBuilder = new StringBuilder(lenEntries);
+            for (int j = 0; j < lenEntries; j++) {
                 char randomChar = (char) ('a' + random.nextInt(26)); // Generate random lowercase letter
                 nameBuilder.append(randomChar);
             }
+
+            stringSet.add(nameBuilder.toString());
+        }
+
+        for(String name : stringSet) {
+            compiled.add(new de.grnx.compiled.Lexikoneintrag(name));
+            interpreted.add(new de.grnx.interpreted.Lexikoneintrag(name));
+            interpretedAVL.add(new de.grnx.interpretedAVL.Lexikoneintrag(name));
+        }
+
+        return new ContentDTO(compiled, interpreted, interpretedAVL);
+    }
+
+
+    public static ContentDTO populateListRandom(int numEntries, int lenEntries){
+        var compiled = new ArrayList<de.grnx.compiled.Lexikoneintrag>();
+        var interpreted = new ArrayList<de.grnx.interpreted.Lexikoneintrag>();
+        var interpretedAVL = new ArrayList<de.grnx.interpretedAVL.Lexikoneintrag>();
+
+        Random random = new Random();
+
+        for (int i = 0; i < numEntries; i++) {
+            StringBuilder nameBuilder = new StringBuilder(lenEntries);
+            for (int j = 0; j < lenEntries; j++) {
+                char randomChar = (char) ('a' + random.nextInt(26)); // Generate random lowercase letter
+                nameBuilder.append(randomChar);
+            }
+
             String name = nameBuilder.toString();
-            reference.add(new Lexikoneintrag(name));
-            returns.add(new de.grnx.interpreted.Lexikoneintrag(name));
+            compiled.add(new de.grnx.compiled.Lexikoneintrag(name));
+            interpreted.add(new de.grnx.interpreted.Lexikoneintrag(name));
+            interpretedAVL.add(new de.grnx.interpretedAVL.Lexikoneintrag(name));
+
         }
 
-        return returns;
+
+        return new ContentDTO(compiled, interpreted, interpretedAVL);
     }
 
-
-    public static Object[] populateListRef_Duplicates_trio_large(List<de.grnx.compiled.Lexikoneintrag> reference, int numEntries, int nameLength) {
-        var returns = new ArrayList<de.grnx.interpreted.Lexikoneintrag>();
-        var returns_avl = new ArrayList<de.grnx.interpretedAVL.Lexikoneintrag>();
-        Random random = new Random();
-        var stringSet = new HashSet<String>();
-
-        for (int i = 0; i < numEntries; i++) {
-            StringBuilder nameBuilder = new StringBuilder(nameLength);
-            for (int j = 0; j < nameLength; j++) {
-                char randomChar = (char) ('a' + random.nextInt(26)); // Generate random lowercase letter
-                nameBuilder.append(randomChar);
-            }
-
-            stringSet.add(nameBuilder.toString());
-        }
-
-        for(String name : stringSet) {
-            reference.add(new Lexikoneintrag(name));
-            returns.add(new de.grnx.interpreted.Lexikoneintrag(name));
-            returns_avl.add(new de.grnx.interpretedAVL.Lexikoneintrag(name));
-        }
-        //return null;
-        return new Object[] {(Object)returns, (Object)returns_avl};
-        //return new ArrayList<List<de.grnx.interpreted.Lexikoneintrag>>[]{returns, returns_avl};
-    }
-
-    public static ContentDTO populateLists(int numEntries, int nameLength){
-        var returns = new ArrayList<de.grnx.interpreted.Lexikoneintrag>();
-        var returns_avl = new ArrayList<de.grnx.interpretedAVL.Lexikoneintrag>();
-        var reference = new ArrayList<de.grnx.compiled.Lexikoneintrag>();
-        Random random = new Random();
-        var stringSet = new HashSet<String>();
-
-        for (int i = 0; i < numEntries; i++) {
-            StringBuilder nameBuilder = new StringBuilder(nameLength);
-            for (int j = 0; j < nameLength; j++) {
-                char randomChar = (char) ('a' + random.nextInt(26)); // Generate random lowercase letter
-                nameBuilder.append(randomChar);
-            }
-
-            stringSet.add(nameBuilder.toString());
-        }
-
-        for(String name : stringSet) {
-            reference.add(new Lexikoneintrag(name));
-            returns.add(new de.grnx.interpreted.Lexikoneintrag(name));
-            returns_avl.add(new de.grnx.interpretedAVL.Lexikoneintrag(name));
-        }
-
-        return new ContentDTO(reference, returns, returns_avl);
-    }
 
 
     /**

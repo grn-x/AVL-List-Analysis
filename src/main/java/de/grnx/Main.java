@@ -9,7 +9,6 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        interpretedRuntime();
         System.out.println("\n_________________________________________________________________\n<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>\n‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\n\nCompiled runtime:\n");
         de.grnx.compiled.Tests.main(new String[0]);
         System.out.println("\n_________________________________________________________________\n<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>\n‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\n\nCompiled runtime:\n");
@@ -29,7 +28,7 @@ public class Main {
         List<de.grnx.interpretedAVL.Lexikoneintrag> entries_Interpreted_AVL = (List<de.grnx.interpretedAVL.Lexikoneintrag>)entries_amalgamation[1];
         */
 
-        var contentDTO = PopulateTree.populateLists(1000, 10);
+        var contentDTO = PopulateTree.populateListRandomUnique(10000, 10);
         var entries_Compiled = contentDTO.compiled();
         var entries_Interpreted = contentDTO.interpreted();
         var entries_Interpreted_AVL = contentDTO.interpretedAVL();
@@ -202,90 +201,6 @@ public class Main {
         return bstEndTime - bstStartTime;
     }
 
-    private static void compareBSFtoBinarySearchTree_dpr() {
-        BSF<ArrayList<de.grnx.compiled.Lexikoneintrag>, de.grnx.compiled.Lexikoneintrag> bsf = new BSF<>(ArrayList.class);
-        BinBaum binarySearchTree = new BinBaum();
-        List<de.grnx.compiled.Lexikoneintrag> entries = new ArrayList<>();
-        PopulateTree.populateListRef(entries, 100, 0);
-        for (de.grnx.compiled.Lexikoneintrag entry : entries) {
-            bsf.insertElement(entry);
-            binarySearchTree.einfuegen(entry);
-        }
 
-        long bsfStartTime = System.currentTimeMillis();
-        for (de.grnx.compiled.Lexikoneintrag entry : entries) {
-            bsf.search(entry);
-        }
-        long bsfEndTime = System.currentTimeMillis();
-        long bsfDuration = bsfEndTime - bsfStartTime;
 
-        long bstStartTime = System.currentTimeMillis();
-        for (de.grnx.compiled.Lexikoneintrag entry : entries) {
-            binarySearchTree.suchen(entry.getName());
-        }
-        long bstEndTime = System.currentTimeMillis();
-        long bstDuration = bstEndTime - bstStartTime;
-
-        System.out.println("BSF search time: " + bsfDuration + "ms");
-        System.out.println("Binary search tree search time: " + bstDuration + "ms");
-    }
-
-    private static void interpretedRuntime() {
-        ArrayList<Lexikoneintrag> liste = new ArrayList<>();
-        int index = 0;
-        BinBaum B1 = new BinBaum();
-        Lexikoneintrag L1 = new Lexikoneintrag("man");
-        Lexikoneintrag L2 = new Lexikoneintrag("blood");
-        Lexikoneintrag L3 = new Lexikoneintrag("call");
-        Lexikoneintrag L4 = new Lexikoneintrag("escape");
-        Lexikoneintrag L5 = new Lexikoneintrag("car");
-        Lexikoneintrag L6 = new Lexikoneintrag("rocket");
-        Lexikoneintrag L7 = new Lexikoneintrag("idiot");
-        Lexikoneintrag L8 = new Lexikoneintrag("help");
-        for (int j = 0; j < 10; j++) {
-            B1.reset();
-            //   B1.wurzel = new Abschluss();
-            liste.add(L1);
-            liste.add(L2);
-            liste.add(L3);
-            liste.add(L4);
-            liste.add(L5);
-            liste.add(L6);
-            liste.add(L7);
-            liste.add(L8);
-            for (int i = liste.size() - 1; i >= 0; i--) {
-                //index = Random.randint(0, i);
-                index = new Random().nextInt(i+1);
-                B1.einfuegen(liste.get(index));
-                liste.remove(index);//do all of the elements really have the same probability of being picked? i feel
-                // like the lower ones are being preferred?
-            }
-            B1.strukturiertPreOrderAusgeben();
-            B1.hoeheBaumBestimmen();
-            B1.inOrderausgeben();
-            println("----------------");
-        }
-
-            /*
-            B1.einfuegen(L6);
-            B1.einfuegen(L4);
-            B1.einfuegen(L2);
-            B1.einfuegen(L1);
-            B1.einfuegen(L5);
-            B1.einfuegen(L8);
-            B1.einfuegen(L7);
-            B1.einfuegen(L3);
-            println("-----------------");
-            println(B1.suchen("help").getName());
-            println(B1.suchen("call").getName());
-            println(B1.suchen("carr").getName());
-            println(B1.suchen("car").getName());
-            println("-----------------");
-            B1.inOrderausgeben();
-            println("-----------------");
-            B1.preOrderausgeben();
-            println("-----------------");
-            B1.strukturiertPreOrderAusgeben();
-            */
-    }
 }
