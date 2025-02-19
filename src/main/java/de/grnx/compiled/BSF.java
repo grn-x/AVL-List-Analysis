@@ -146,6 +146,10 @@ public class BSF<T extends List<E>, E extends Comparable> {
         return list;
     }
 
+    public String getType() {
+        return list.getClass().getTypeName();
+    }
+
     public String toString() {
         return list.getClass().getTypeName() + "\n" + list.toString();
     }

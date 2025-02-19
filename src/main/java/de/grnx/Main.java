@@ -1,5 +1,4 @@
 package de.grnx;
-import static de.grnx.interpreted.Utils.*;
 
 import de.grnx.compiled.BSF;
 import de.grnx.interpreted.*;
@@ -28,7 +27,7 @@ public class Main {
         List<de.grnx.interpretedAVL.Lexikoneintrag> entries_Interpreted_AVL = (List<de.grnx.interpretedAVL.Lexikoneintrag>)entries_amalgamation[1];
         */
 
-        var contentDTO = PopulateTree.populateListRandomUnique(50000, 1000);
+        var contentDTO = PopulateTree.populateListRandomUnique(10000, 1000);
         var entries_Compiled = contentDTO.compiled();
         var entries_Interpreted = contentDTO.interpreted();
         var entries_Interpreted_AVL = contentDTO.interpretedAVL();
@@ -50,16 +49,21 @@ public class Main {
         //System.out.println("\nBSF (LinkedList (Non RandomAccess!)): \n" + testBSF_linked(entries_Compiled));
 */
 
-
+/*
         System.out.println("BSF linear search: \n" + testBSFLinearSearch(entries_Compiled));
-        System.out.println("BSF (ArrayList (RandomAccess)): \n" + testBSF(entries_Compiled));
+        System.out.println("BSF (ArrayList (RandomAccess)): \n" + testBSF_array(entries_Compiled));
         System.out.println("Binary Tree (Non balanced, dataset randomized): \n" + testBinarySearchTree(entries_Interpreted));
         System.out.println("\nBinary Tree (AVL, balanced, dataset randomized): \n" + testBinarySearchTreeAVL(entries_Interpreted_AVL));
         System.out.println("Binary Tree (Non balanced, dataset presorted, worst-case): \n" + testBinarySearchTreePreSorted(entries_Interpreted));
         System.out.println("\nBSF (Stack (RandomAccess)): \n" + testBSF_stack(entries_Compiled));
         System.out.println("\nBSF (Vector (RandomAccess)): \n" + testBSF_vector(entries_Compiled));
         System.out.println("\nBSF (LinkedList (Non RandomAccess!)): \n" + testBSF_linked(entries_Compiled));
-
+*/
+        System.out.println("BSF (ArrayList (RandomAccess)): \n" + testBSF(ArrayList.class, entries_Compiled));
+        System.out.println("BSF (Vector (RandomAccess)): \n" + testBSF(Vector.class, entries_Compiled));
+        System.out.println("BSF (ArrayList (RandomAccess)): \n" + testBSF(ArrayList.class, entries_Compiled));
+        System.out.println("BSF (ArrayList (RandomAccess)): \n" + testBSF(ArrayList.class, entries_Compiled));
+        System.out.println("BSF (Vector (RandomAccess)): \n" + testBSF(Vector.class, entries_Compiled));
 
         /* Example Output: 10 chars each over 10,000 entries
 
@@ -139,7 +143,39 @@ public class Main {
 
     }
 
-    private static String testBSF(List<de.grnx.compiled.Lexikoneintrag> entries) {
+    private static <T extends List<de.grnx.compiled.Lexikoneintrag>> String testBSF(Class<T> listClass, List<de.grnx.compiled.Lexikoneintrag> entries) {
+        BSF<T, de.grnx.compiled.Lexikoneintrag> bsf = new BSF<>(listClass);
+        var timeDiffs = new Stack<Long>();
+
+        long insertStartNanos = System.nanoTime();
+        for (de.grnx.compiled.Lexikoneintrag entry : entries) {
+            bsf.insertElement(entry);
+        }
+        long insertEndNanos = System.nanoTime();
+
+        for (int i = 0; i < 100; i++) {
+            long searchSingular = System.nanoTime();
+            for (de.grnx.compiled.Lexikoneintrag entry : entries) {
+                bsf.search(entry);
+            }
+            timeDiffs.push(System.nanoTime() - searchSingular);
+        }
+
+        long avg = timeDiffs.stream().mapToLong(Long::longValue).sum() / timeDiffs.size();
+        long max = timeDiffs.stream().mapToLong(Long::longValue).max().getAsLong();
+        long min = timeDiffs.stream().mapToLong(Long::longValue).min().getAsLong();
+
+        var returns = new StringBuilder();
+        returns.append("Underlying List Type: ").append(bsf.getType()).append("\n");
+        returns.append("Num Entries List: ").append(bsf.getList().size()).append("\n");
+        returns.append("Insertion time: ").append(String.format("%.3f", (insertEndNanos - insertStartNanos) / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (avg): ").append(String.format("%.3f", avg / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (max): ").append(String.format("%.3f", max / 1000000.0)).append("ms\n");
+        returns.append("\tSearch time (min): ").append(String.format("%.3f", min / 1000000.0)).append("ms\n");
+        return returns.toString();
+    }
+
+    private static String testBSF_array(List<de.grnx.compiled.Lexikoneintrag> entries) {
         BSF<ArrayList<de.grnx.compiled.Lexikoneintrag>, de.grnx.compiled.Lexikoneintrag> bsf = new BSF<>(ArrayList.class);
         var timeDiffs = new Stack<Long>();
 
