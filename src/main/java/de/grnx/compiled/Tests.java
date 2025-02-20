@@ -9,13 +9,23 @@ import java.util.stream.Stream;
 
 public class Tests {
 
-    public static void main(String[] args) {
+    public static void main(String... args) {
+        int numEntries = 1000;
+        int lenEntries = 12;
+
+        if(args.length == 2 && args[0].matches("[0-9]+") && args[1].matches("[0-9]+")){
+            numEntries = Integer.parseInt(args[0]);
+            lenEntries = Integer.parseInt(args[1]);
+        }
+
+        System.out.println("numEntries = " + numEntries + ",\t lenEntries = " + lenEntries);
+
         long startTime = System.currentTimeMillis();
         PopulateTree.preInit();
         long endTime = System.currentTimeMillis();
         System.out.println("File Reading Operation took: " + (endTime - startTime) + "ms");
 
-        var contentDTO = PopulateTree.populateListRandomUnique(1000, 12);//=PopulateTree.populateListNamesUnique(100);
+        var contentDTO = PopulateTree.populateListRandomUnique(numEntries, lenEntries);//=PopulateTree.populateListNamesUnique(100);
         Supplier<Stream<Lexikoneintrag>> streamSupplier = () -> contentDTO.compiled().stream();
 
         //testBSFfunctionality(streamSupplier.get());

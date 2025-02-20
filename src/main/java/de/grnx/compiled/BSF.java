@@ -3,6 +3,8 @@ package de.grnx.compiled;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
+
 /**
  * Generic class BinarySearchFramework that can be used to instantiate a list of a specific type and perform operations on it.
  * @param <T> The type of list to be instantiated
@@ -14,7 +16,52 @@ public class BSF<T extends List<E>, E extends Comparable> {
     public BSF(Class<? extends T> clazz) {
         try {
             Constructor<? extends T> constructor = clazz.getDeclaredConstructor();
+            var constructors = clazz.getConstructors();
+
+            /*System.err.println(Arrays.stream(constructors).map((c) -> {
+                return "Name: " + c.getName() + " \t Types:" + Arrays.toString(c.getParameterTypes());
+            }).collect(Collectors.joining("\n")));
+            */
+            boolean initialSizeExists = Arrays.stream(constructors).anyMatch((c) -> c.getParameterCount() == 1 && c.getParameterTypes()[0].equals(int.class));
+            if(initialSizeExists){
+                System.out.println("Warning: " + clazz.getTypeName() + " has a constructor with a single int parameter, possibly allowing for initial capacity control, consider using it for performance benefits");
+            }
+
             this.list = constructor.newInstance();
+            if(!(list instanceof RandomAccess)){
+                System.err.println("Warning: " + list.getClass().getTypeName() +" is not RandomAccess");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to instantiate list", e);
+        }
+    }
+
+    /**
+     * Constructor with initial capacity
+     * @param clazz The class of the list
+     * @param initialParam The initial capacity of the list
+     * The initialParam will be injected if the reflected clazz contains a constructor with a single int parameter;
+     * hoping that this corresponds to the initial capacity of the list
+     */
+    public BSF(Class<? extends T> clazz, int initialParam) {
+        try {
+            var constructors = clazz.getConstructors();
+
+            /*System.err.println(Arrays.stream(constructors).map((c) -> {
+                return "Name: " + c.getName() + " \t Types:" + Arrays.toString(c.getParameterTypes());
+            }).collect(Collectors.joining("\n")));
+            */
+            boolean initialSizeExists = Arrays.stream(constructors).anyMatch((c) -> c.getParameterCount() == 1 && c.getParameterTypes()[0].equals(int.class));
+            Constructor<? extends T> constructor;
+            if(initialSizeExists){
+                constructor = clazz.getDeclaredConstructor(int.class);
+                this.list = constructor.newInstance(initialParam);
+            }else{
+                System.err.println("Warning: " + clazz.getTypeName() + " does not have a constructor with a single int parameter, default empty constructor will be used");
+                constructor = clazz.getDeclaredConstructor();
+                this.list = constructor.newInstance();
+            }
+
             if(!(list instanceof RandomAccess)){
                 System.err.println("Warning: " + list.getClass().getTypeName() +" is not RandomAccess");
             }
