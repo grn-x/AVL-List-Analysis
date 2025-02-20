@@ -60,9 +60,10 @@ public class Main {
         System.out.println("\nBSF (LinkedList (Non RandomAccess!)): \n" + testBSF_linked(entries_Compiled));
 */
         System.out.println("BSF (ArrayList (RandomAccess)): \n" + testBSF(ArrayList.class, entries_Compiled));
+        System.out.println("BSF (ArrayList (RandomAccess)): \n" + testBSF_array(entries_Compiled));
         System.out.println("BSF (Vector (RandomAccess)): \n" + testBSF(Vector.class, entries_Compiled));
         System.out.println("BSF (ArrayList (RandomAccess)): \n" + testBSF(ArrayList.class, entries_Compiled));
-        System.out.println("BSF (ArrayList (RandomAccess)): \n" + testBSF(ArrayList.class, entries_Compiled));
+        System.out.println("BSF (ArrayList (RandomAccess)): \n" + testBSF_array(entries_Compiled));
         System.out.println("BSF (Vector (RandomAccess)): \n" + testBSF(Vector.class, entries_Compiled));
 
         /* Example Output: 10 chars each over 10,000 entries
