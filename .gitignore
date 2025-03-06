@@ -36,3 +36,5 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+avl-bsf-readme-drawing/**
